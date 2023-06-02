@@ -10,6 +10,10 @@ bindkey "\e[A" history-search-backward
 bindkey "\e[B" history-search-forward
 bindkey "\eOA" history-search-backward
 bindkey "\eOB" history-search-forward
+bindkey "^P" history-search-backward
+bindkey "^N" history-search-forward
+bindkey -s "^U" "cd ..^M"
+bindkey -s "^ " "^M"
 
 # run tmux on startup
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
