@@ -182,6 +182,7 @@ local builtin = require('telescope.builtin')
 require("telescope").load_extension("live_grep_args")
 require('telescope').load_extension('neoclip')
 require('telescope').load_extension('fzf')
+require('telescope').load_extension('ctags_plus')
 
 --luatab
 require('luatab').setup{
@@ -218,6 +219,9 @@ vim.api.nvim_set_keymap("n", "go", ":call CurtineIncSw()<cr>" ,{silent = true, n
 vim.api.nvim_set_keymap("n", "gf", [[:w<cr>:!ya style %<cr>:e<cr>]] ,{silent = true, noremap = true})
 vim.api.nvim_set_keymap("n", "gl", ":set number!<cr>", {silent = true, noremap = true})
 vim.api.nvim_set_keymap("n", "gc", "<ESC>:tabc<cr>" ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap("n", "<leader>f", ":ClangFormat<cr>" ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap("v", "<leader>f", ":ClangFormat<cr>" ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap("n", "g]", ":lua require('telescope').extensions.ctags_plus.jump_to_tag()<cr>" ,{silent = true, noremap = true})
 vim.keymap.set('n', '<cr>', '<cr>', {})
 
 -- may be useful
