@@ -31,6 +31,69 @@ let &scrolloff = 5
 " set backupdir=~/.cache/vim " Directory to store backup files.
 
 
+let g:gutentags_add_default_project_roots = 0
+let g:gutentags_project_root=['.clang-tidy']
+let g:gutentags_cache_dir = expand('~/.cache/vim/ctags/')
+let g:gutentags_generate_on_new = 1
+let g:gutentags_generate_on_missing = 1
+let g:gutentags_generate_on_write = 1
+let g:gutentags_generate_on_empty_buffer = 0
+set statusline+=%{gutentags#statusline()}
+let g:gutentags_ctags_extra_args = [
+      \ '--tag-relative=yes',
+      \ '--fields=+ailmnS',
+      \ ]
+let g:gutentags_ctags_exclude = [
+      \ '*.git', '*.svg', '*.hg',
+      \ '*/tests/*',
+      \ 'build',
+      \ 'dist',
+      \ '*sites/*/files/*',
+      \ 'bin',
+      \ 'node_modules',
+      \ 'bower_components',
+      \ 'cache',
+      \ 'compiled',
+      \ 'docs',
+      \ 'example',
+      \ 'bundle',
+      \ 'vendor',
+      \ '*.md',
+      \ '*-lock.json',
+      \ '*.lock',
+      \ '*bundle*.js',
+      \ '*build*.js',
+      \ '.*rc*',
+      \ '*.json',
+      \ '*.min.*',
+      \ '*.map',
+      \ '*.bak',
+      \ '*.zip',
+      \ '*.pyc',
+      \ '*.class',
+      \ '*.sln',
+      \ '*.Master',
+      \ '*.csproj',
+      \ '*.tmp',
+      \ '*.csproj.user',
+      \ '*.cache',
+      \ '*.pdb',
+      \ 'tags*',
+      \ 'cscope.*',
+      \ '*.css',
+      \ '*.less',
+      \ '*.scss',
+      \ '*.exe', '*.dll',
+      \ '*.mp3', '*.ogg', '*.flac',
+      \ '*.swp', '*.swo',
+      \ '*.bmp', '*.gif', '*.ico', '*.jpg', '*.png',
+      \ '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz', '*.tar.bz2',
+      \ '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
+      \ ]
+command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
+
+
+
 au TextYankPost * silent! lua vim.highlight.on_yank()
 autocmd TermOpen * setlocal nonumber norelativenumber
 
@@ -54,6 +117,8 @@ Plug 'mhartington/formatter.nvim'
 Plug 'alvarosevilla95/luatab.nvim'
 Plug 'nvim-lualine/lualine.nvim'
 Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'cmake -S. -Bbuild -DCMAKE_BUILD_TYPE=Release && cmake --build build --config Release && cmake --install build --prefix build' }
+Plug 'ludovicchabant/vim-gutentags'
+Plug 'gnfisher/nvim-telescope-ctags-plus'
 
 Plug 'sainnhe/everforest'
 Plug 'dracula/vim', { 'as': 'dracula' }
@@ -69,6 +134,7 @@ Plug 'echasnovski/mini.base16'
 Plug 'nelstrom/vim-mac-classic-theme'
 Plug 'yorickpeterse/vim-paper'
 Plug 'chomosuke/term-edit.nvim', {'tag': 'v1.*'}
+Plug 'rhysd/vim-clang-format'
 call plug#end()
 
 set background=light
