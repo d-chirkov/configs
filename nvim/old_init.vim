@@ -101,6 +101,7 @@ autocmd TermOpen * setlocal nonumber norelativenumber
 " Should install
 " https://github.com/sharkdp/fd
 " https://github.com/BurntSushi/ripgrep
+" https://github.com/universal-ctags/ctags
 
 
 call plug#begin()
