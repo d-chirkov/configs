@@ -3,6 +3,8 @@ PROMPT='%F{cyan}[SERVICE] %1~%f%F{red}:%f '
 
 PATH="$HOME/.local/bin:$HOME/bin:$PATH"
 
+alias n='nvim'
+
 SAVEHIST=10000
 HISTFILE=~/.zsh_history
 
@@ -12,7 +14,6 @@ bindkey "\eOA" history-search-backward
 bindkey "\eOB" history-search-forward
 bindkey "^P" history-search-backward
 bindkey "^N" history-search-forward
-bindkey -s "^U" "cd ..^M"
 
 # run tmux on startup
 if command -v tmux &> /dev/null && [ -n "$PS1" ] && [[ ! "$TERM" =~ screen ]] && [[ ! "$TERM" =~ tmux ]] && [ -z "$TMUX" ]; then
