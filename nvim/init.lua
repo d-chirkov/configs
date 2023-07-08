@@ -11,37 +11,6 @@ require('nvim-treesitter.configs').setup({
     },
 })
 
---neoclip
-require('neoclip').setup({
-    on_select = {
-        move_to_front = false,
-        close_telescope = true,
-    },
-    on_paste = {
-        set_reg = false,
-        move_to_front = false,
-        close_telescope = true,
-    },
-    on_replay = {
-        set_reg = false,
-        move_to_front = false,
-        close_telescope = true,
-    },
-    on_custom_action = {
-        close_telescope = true,
-    },
-    keys = {
-        telescope = {
-            i = {
-                paste = '<cr>',
-                paste_behind = '<c-l>',
-                delete = '<c-d>',
-                custom = {},
-            },
-        },
-    },
-})
-
 --nvim-surround
 require("nvim-surround").setup({})
 
@@ -107,7 +76,12 @@ local function on_attach(bufnr)
     -- END_DEFAULT_ON_ATTACH
     vim.keymap.set('n', 'l', api.node.open.edit, opts('Open'))
     vim.keymap.set('n', 'h', api.node.navigate.parent_close, opts('Close Directory'))
+    vim.keymap.set('n', '<Esc>',     api.tree.close,                        opts('Close'))
 end
+
+local HEIGHT_RATIO = 0.8
+local WIDTH_RATIO = 0.5
+
 require("nvim-tree").setup({
     sort_by = "case_sensitive",
     sync_root_with_cwd = true,
@@ -115,10 +89,30 @@ require("nvim-tree").setup({
     on_attach = on_attach,
     view = {
         centralize_selection = true,
-        width = 45,
         float = {
-            enable = false,
-        }
+            enable = true,
+            open_win_config = function()
+                local screen_w = vim.opt.columns:get()
+                local screen_h = vim.opt.lines:get() - vim.opt.cmdheight:get()
+                local window_w = screen_w * WIDTH_RATIO
+                local window_h = screen_h * HEIGHT_RATIO
+                local window_w_int = math.floor(window_w)
+                local window_h_int = math.floor(window_h)
+                local center_x = (screen_w - window_w) / 2
+                local center_y = ((vim.opt.lines:get() - window_h) / 2) - vim.opt.cmdheight:get()
+                return {
+                    border = 'rounded',
+                    relative = 'editor',
+                    row = center_y,
+                    col = center_x,
+                    width = window_w_int,
+                    height = window_h_int,
+                }
+            end,
+        },
+        width = function()
+            return math.floor(vim.opt.columns:get() * WIDTH_RATIO)
+        end,
     },
     tab = {
         sync = {
@@ -134,148 +128,154 @@ require("nvim-tree").setup({
         update_cwd = false,
     }
 })
-vim.api.nvim_create_autocmd("BufEnter", {
-    nested = true,
-    callback = function()
-        if #vim.api.nvim_list_wins() == 1 and require("nvim-tree.utils").is_nvim_tree_buf() then
-            vim.cmd "quit"
-        end
-    end
-})
-
---telescope
-local lga_actions = require("telescope-live-grep-args.actions")
-local telescope_actions = require('telescope.actions')
-require("telescope").setup {
-    defaults = {
-        mappings = {
-            i = {
-                ["<C-l>"] = telescope_actions.select_default,
-                ["<C-u>"] = telescope_actions.results_scrolling_up,
-                ["<C-d>"] = telescope_actions.results_scrolling_down,
-                ["<esc>"] = telescope_actions.close,
-            },
-            n = {
-                ["<C-l>"] = telescope_actions.select_default,
-            },
-        },
-    },
-    extensions = {
-        fzf = {
-            fuzzy = true,
-            override_generic_sorter = true,
-            override_file_sorter = true,
-            case_mode = "smart_case",
-        },
-        live_grep_args = {
-            auto_quoting = true,
-            mappings = {
-                i = {
-                    ["<C-k>"] = lga_actions.quote_prompt(),
-                    ["<C-i>"] = lga_actions.quote_prompt({ postfix = " --iglob " }),
-                },
-            },
-        }
-    }
-}
-local builtin = require('telescope.builtin')
-require("telescope").load_extension("live_grep_args")
-require('telescope').load_extension('neoclip')
-require('telescope').load_extension('fzf')
-require('telescope').load_extension('ctags_plus')
-
---luatab
-require('luatab').setup{
-    devicon = function() return '' end,
-}
 
 --term-edit
 require 'term-edit'.setup {
     prompt_end = ':',
 }
 
--- bindings
+--treesitter
+require'nvim-treesitter.configs'.setup {
+    textobjects = {
+        select = {
+            enable = true,
+            lookahead = true,
+            keymaps = {
+                ["af"] = "@function.outer",
+                ["if"] = "@function.inner",
+                ["ac"] = "@class.outer",
+                ["ic"] = { query = "@class.inner", desc = "Select inner part of a class region" },
+                ["as"] = { query = "@scope", query_group = "locals", desc = "Select language scope" },
+            },
+            selection_modes = {
+                ['@parameter.outer'] = 'v', -- charwise
+                ['@function.outer'] = 'V', -- linewise
+                ['@class.outer'] = '<c-v>', -- blockwise
+            },
+            include_surrounding_whitespace = true,
+        },
+        move = {
+            enable = true,
+            set_jumps = true,
+            goto_next_start = {
+                ["]f"] = "@function.outer",
+                ["]]"] =  "@function.outer",
+                --["<C-n>"] =  "@function.outer",
+            },
+            goto_next_end = {
+                ["]F"] = "@function.outer",
+            },
+            goto_previous_start = {
+                ["[f"] = "@function.outer",
+                ["[["] = "@function.outer",
+                --["<C-m>"] =  "@function.outer",
+            },
+            goto_previous_end = {
+                ["[F"] = "@function.outer",
+            },
+        },
+    },
+}
+
+--lualine
+require('lualine').setup {
+    options = {
+        icons_enabled = true,
+        theme = 'material',
+        component_separators = { left = '', right = ''},
+        section_separators = { left = '', right = ''},
+        disabled_filetypes = {
+            statusline = {},
+            winbar = {},
+        },
+        ignore_focus = {},
+        always_divide_middle = true,
+        globalstatus = false,
+        refresh = {
+            statusline = 1000,
+            tabline = 1000,
+            winbar = 1000,
+        }
+    },
+    sections = {
+        lualine_a = {{
+            'tabs',
+            mode = 2,
+            max_length = 2 * vim.o.columns / 3,
+            --use_mode_colors = true,
+            fmt = function(name, context)
+                local buflist = vim.fn.tabpagebuflist(context.tabnr)
+                local winnr = vim.fn.tabpagewinnr(context.tabnr)
+                local bufnr = buflist[winnr]
+                local mod = vim.fn.getbufvar(bufnr, '&mod')
+
+                return (mod == 1 and '*' or '') .. name
+            end
+        }},
+        lualine_b = {},
+        lualine_c = { {'filename', path = 1 } },
+        lualine_x = {},
+        lualine_y = {'progress', 'selectioncount'},
+        lualine_z = {'mode'},
+    },
+    extensions = {}
+}
+
+--fzf-lua
+require("fzf-lua").setup({
+    grep = {
+        rg_glob = true,
+        glob_flag = "--iglob",
+        glob_separator = "%s%-%-",
+    },
+    winopts = {
+        preview = {
+            layout = 'vertical',
+        },
+    },
+    oldfiles = {
+        include_current_session = true,
+    },
+    keymap = {
+        fzf = {
+            ["esc"] = "abort",
+            ["ctrl-d"] = "half-page-down",
+            ["ctrl-u"] = "half-page-up",
+            ["ctrl-a"] = "beginning-of-line",
+            ["ctrl-e"] = "end-of-line",
+            ["alt-a"] = "toggle-all",
+        },
+    },
+})
+
+--bindings
 vim.keymap.set('n', '<C-h>', [[<Cmd>wincmd h<CR>]], {silent = true, noremap = true})
 vim.keymap.set('n', '<C-j>', [[<Cmd>wincmd j<CR>]], {silent = true, noremap = true})
 vim.keymap.set('n', '<C-k>', [[<Cmd>wincmd k<CR>]], {silent = true, noremap = true})
 vim.keymap.set('n', '<C-l>', [[<Cmd>wincmd l<CR>]], {silent = true, noremap = true})
-vim.api.nvim_set_keymap("n", "<C-g>", ":NvimTreeToggle<cr>" ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap("n", "ga", ":NvimTreeToggle<cr>" ,{silent = true, noremap = true})
 vim.api.nvim_set_keymap("t", "<Esc>", [[<C-\><C-n>]], {silent = true, noremap = true})
-vim.keymap.set('n', '<leader>tb', builtin.buffers, {})
-vim.keymap.set('n', '<leader>tc', builtin.colorscheme, {})
-vim.keymap.set('n', '<leader>tr', builtin.resume, {})
-vim.api.nvim_set_keymap('v', '<c-f>', 'y<ESC>:Telescope live_grep_args default_text=<c-r>0<CR>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap("n", "gn", ":Telescope oldfiles<cr>" ,{silent = true, noremap = true})
-vim.api.nvim_set_keymap("n", "gm", ":Telescope neoclip<cr>" ,{silent = true, noremap = true})
-vim.api.nvim_set_keymap('n', 'g,', ':Telescope find_files<cr>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap('n', 'g.', ':Telescope live_grep_args<cr>', {noremap = true, silent = true})
-vim.api.nvim_set_keymap("n", "<leader>tp", [[:let @" = expand("%:p:h")<cr>:tabnew<cr>:NvimTreeClose<cr>:terminal<cr>acd <c-\><c-n>pa<cr>clear<cr>]] ,{silent = true, noremap = true})
-vim.api.nvim_set_keymap("n", "<leader>tt", [[:tabnew<cr>:NvimTreeClose<cr>:terminal<cr>a]] ,{silent = true, noremap = true})
-vim.api.nvim_set_keymap("n", "g9", ":tabp<cr>" ,{silent = true, noremap = true})
-vim.api.nvim_set_keymap("n", "g0", ":tabn<cr>" ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap('v', '<c-f>', '<ESC>:FzfLua grep_visual<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', '<c-f>', ':FzfLua grep_cword<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap("n", "gn", ":FzfLua oldfiles<cr>" ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap('n', 'gm', ':FzfLua files<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', 'g.', ':FzfLua live_grep<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap('n', 'gr', ':FzfLua resume<cr>', {noremap = true, silent = true})
+vim.api.nvim_set_keymap("n", "<leader>tp", [[:let @" = expand("%:p:h")<cr>:tabnew<cr>:terminal<cr>acd <c-\><c-n>pa<cr>clear<cr>]] ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap("n", "<leader>tt", [[:tabnew<cr>:terminal<cr>a]] ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap("n", "gtt", [[:let @" = expand("%:p:h")<cr>:tabnew<cr>:terminal<cr>acd <c-\><c-n>pa<cr>clear<cr>]] ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap("n", "gtp", [[:let @" = expand("%:p:h")<cr>:tabnew<cr>:terminal<cr>acd <c-\><c-n>pa<cr>clear<cr>]] ,{silent = true, noremap = true})
 vim.api.nvim_set_keymap("n", "gs", "<S-*>ggn" ,{silent = true, noremap = true})
-vim.api.nvim_set_keymap("n", "<C-t>", ":tabnew<cr>" ,{silent = true, noremap = true})
 vim.api.nvim_set_keymap("n", "go", ":call CurtineIncSw()<cr>" ,{silent = true, noremap = true})
 vim.api.nvim_set_keymap("n", "gf", [[:w<cr>:!ya style %<cr>:e<cr>]] ,{silent = true, noremap = true})
 vim.api.nvim_set_keymap("n", "gl", ":set number!<cr>", {silent = true, noremap = true})
-vim.api.nvim_set_keymap("n", "gc", "<ESC>:tabc<cr>" ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap("n", "gc", "<ESC>:tabnew<cr>" ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap("n", "<c-t>", "<ESC>:tabnew<cr>" ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap("n", "gx", "<ESC>:tabc<cr>" ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap("n", "g9", ":tabp<cr>" ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap("n", "g0", ":tabn<cr>" ,{silent = true, noremap = true})
 vim.api.nvim_set_keymap("n", "<leader>f", ":ClangFormat<cr>" ,{silent = true, noremap = true})
 vim.api.nvim_set_keymap("v", "<leader>f", ":ClangFormat<cr>" ,{silent = true, noremap = true})
-vim.api.nvim_set_keymap("n", "g]", ":lua require('telescope').extensions.ctags_plus.jump_to_tag()<cr>" ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap("n", "g]", ":call gutentags#setup_gutentags()<cr>:FzfLua tags_grep_cword<cr>", {silent = true, noremap = true})
+vim.api.nvim_set_keymap("v", "g]", "<ESC>:call gutentags#setup_gutentags()<cr>:FzfLua tags_grep_visual<cr>", {silent = true, noremap = true})
 vim.keymap.set('n', '<cr>', '<cr>', {})
-
--- may be useful
-
---formatter
---[[
-local util = require "formatter.util"
-require("formatter").setup {
-    -- Enable or disable logging
-    logging = true,
-    log_level = vim.log.levels.WARN,
-    filetype = {
-        cpp = {
-            function()
-                return {
-                    exe = "clang-format",
-                    args = {
-                        "-assume-filename",
-                        util.escape_path(util.get_current_buffer_file_path()),
-                    },
-                    stdin = true,
-                    try_node_modules = true,
-                }
-            end
-        },
-        python = {
-            --require("formatter.filetypes.python").black,
-            function()
-                return {
-                    exe = "black",
-                    args = {
-                        "--skip-string-normalization",
-                        "--line-length=120",
-                        "--target-version=py310",
-                        "-q",
-                        "-",
-                    },
-                    stdin = true,
-                }
-            end
-        },
-        ["*"] = {
-            require("formatter.filetypes.any").remove_trailing_whitespace
-        }
-    }
-}
-vim.api.nvim_set_keymap("n", "gf", ":Format<cr>" ,{silent = true, noremap = true})
-vim.api.nvim_set_keymap("n", "gi", "gg=G" ,{silent = true, noremap = true})
-]]
-
-
---vim.api.nvim_set_keymap("i", "<C-[>", "<ESC>:tabp<cr>" ,{silent = true, noremap = true})
---vim.api.nvim_set_keymap("i", "<C-]>", "<ESC>:tabn<cr>" ,{silent = true, noremap = true})
---vim.api.nvim_set_keymap("i", "<C-t>", "<ESC>:tabnew<cr>" ,{silent = true, noremap = true})
---vim.api.nvim_set_keymap("t", "<C-]>", [[<C-\><C-n>:tabn<CR>]] ,{silent = true, noremap = true})
---vim.api.nvim_set_keymap("t", "<C-[>", [[<C-\><C-n>:tabp<CR>]] ,{silent = true, noremap = true})
---vim.api.nvim_set_keymap("t", "<C-t>", [[<C-\><C-n>:tabnew<CR>]] ,{silent = true, noremap = true})
