@@ -263,7 +263,7 @@ vim.api.nvim_set_keymap('n', 'g.', ':FzfLua live_grep<cr>', {noremap = true, sil
 vim.api.nvim_set_keymap('n', 'gr', ':FzfLua resume<cr>', {noremap = true, silent = true})
 vim.api.nvim_set_keymap("n", "<leader>tp", [[:let @" = expand("%:p:h")<cr>:tabnew<cr>:terminal<cr>acd <c-\><c-n>pa<cr>clear<cr>]] ,{silent = true, noremap = true})
 vim.api.nvim_set_keymap("n", "<leader>tt", [[:tabnew<cr>:terminal<cr>a]] ,{silent = true, noremap = true})
-vim.api.nvim_set_keymap("n", "gtt", [[:let @" = expand("%:p:h")<cr>:tabnew<cr>:terminal<cr>acd <c-\><c-n>pa<cr>clear<cr>]] ,{silent = true, noremap = true})
+vim.api.nvim_set_keymap("n", "gtt", [[:tabnew<cr>:terminal<cr>a]] ,{silent = true, noremap = true})
 vim.api.nvim_set_keymap("n", "gtp", [[:let @" = expand("%:p:h")<cr>:tabnew<cr>:terminal<cr>acd <c-\><c-n>pa<cr>clear<cr>]] ,{silent = true, noremap = true})
 vim.api.nvim_set_keymap("n", "gs", "<S-*>ggn" ,{silent = true, noremap = true})
 vim.api.nvim_set_keymap("n", "go", ":call CurtineIncSw()<cr>" ,{silent = true, noremap = true})
