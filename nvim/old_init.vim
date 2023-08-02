@@ -20,6 +20,7 @@ Plug 'chomosuke/term-edit.nvim', {'tag': 'v1.*'}
 Plug 'rhysd/vim-clang-format'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'ibhagwan/fzf-lua', {'branch': 'main'}
+Plug 'samjwill/nvim-unception'
 
 Plug 'sainnhe/everforest'
 Plug 'dracula/vim', { 'as': 'dracula' }
@@ -35,10 +36,11 @@ Plug 'echasnovski/mini.base16'
 Plug 'nelstrom/vim-mac-classic-theme'
 Plug 'yorickpeterse/vim-paper'
 Plug 'phha/zenburn.nvim'
+Plug 'Mofiqul/vscode.nvim'
 call plug#end()
 
 set background=dark
-colorscheme everforest
+colorscheme vscode
 
 if has('termguicolors')
     set termguicolors
