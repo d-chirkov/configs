@@ -16,7 +16,7 @@ Plug 'ericcurtin/CurtineIncSw.vim'
 Plug 'mhartington/formatter.nvim'
 Plug 'ludovicchabant/vim-gutentags'
 Plug 'nvim-lualine/lualine.nvim'
-Plug 'chomosuke/term-edit.nvim', {'tag': 'v1.*'}
+Plug 'chomosuke/term-edit.nvim'
 Plug 'rhysd/vim-clang-format'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'ibhagwan/fzf-lua', {'branch': 'main'}
@@ -39,8 +39,8 @@ Plug 'phha/zenburn.nvim'
 Plug 'Mofiqul/vscode.nvim'
 call plug#end()
 
-set background=dark
-colorscheme vscode
+set background=light
+colorscheme hybrid
 
 if has('termguicolors')
     set termguicolors
@@ -72,6 +72,7 @@ set clipboard=
 set fillchars=eob:\ ,fold:\ ,vert:\│ " remove unnecessary tildas at empty lines
 let &scrolloff = 5
 set showtabline=0
+set relativenumber
 " let g:clang_format#command="ya tool clang-format"
 
 " set backupdir=~/.cache/vim " Directory to store backup files.
