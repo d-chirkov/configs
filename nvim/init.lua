@@ -215,7 +215,7 @@ require('lualine').setup {
         lualine_b = {},
         lualine_c = { {'filename', path = 1 } },
         lualine_x = {},
-        lualine_y = {'progress', 'selectioncount'},
+        lualine_y = {'location', 'progress', 'selectioncount'},
         lualine_z = {'mode'},
     },
     extensions = {}
