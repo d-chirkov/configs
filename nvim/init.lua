@@ -23,7 +23,7 @@ local function on_attach(bufnr)
     -- BEGIN_DEFAULT_ON_ATTACH
     vim.keymap.set('n', '<C-]>', api.tree.change_root_to_node,          opts('CD'))
     vim.keymap.set('n', '<C-e>', api.node.open.replace_tree_buffer,     opts('Open: In Place'))
-    vim.keymap.set('n', '<C-k>', api.node.show_info_popup,              opts('Info'))
+    -- vim.keymap.set('n', '<C-k>', api.node.show_info_popup,              opts('Info'))
     vim.keymap.set('n', '<C-r>', api.fs.rename_sub,                     opts('Rename: Omit Filename'))
     vim.keymap.set('n', '<C-t>', api.node.open.tab,                     opts('Open: New Tab'))
     vim.keymap.set('n', '<C-v>', api.node.open.vertical,                opts('Open: Vertical Split'))
@@ -181,9 +181,13 @@ require'nvim-treesitter.configs'.setup {
 require('lualine').setup {
     options = {
         icons_enabled = true,
-        theme = 'material',
-        component_separators = { left = '', right = ''},
-        section_separators = { left = '', right = ''},
+        theme = '16color',
+        --theme = 'moonfly',
+        --theme = 'powerline',
+        component_separators = { left = '', right = ''},
+        section_separators = { left = '', right = ''},
+        --component_separators = { left = '<EE><82><B1>', right = '<EE><82><B3>'},
+        --section_separators = { left = '<EE><82><B0>', right = '<EE><82><B2>'},
         disabled_filetypes = {
             statusline = {},
             winbar = {},
@@ -220,6 +224,23 @@ require('lualine').setup {
     },
     extensions = {}
 }
+
+--vscode
+local c = require('vscode.colors').get_colors()
+require('vscode').setup({
+    style = 'light',
+    transparent = true,
+    italic_comments = true,
+    --disable_nvimtree_bg = true,
+    color_overrides = {
+        vscLineNumber = '#b8b8b8',
+    },
+    group_overrides = {
+        --CursorLine = { bg='#dcdcdc' },
+        --MatchParen = { bg='#c0c0c0'},
+    }
+})
+require('vscode').load()
 
 --fzf-lua
 require("fzf-lua").setup({
