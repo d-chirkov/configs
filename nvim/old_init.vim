@@ -28,6 +28,7 @@ Plug 'rebelot/kanagawa.nvim'
 Plug 'morhetz/gruvbox'
 Plug 'NLKNguyen/papercolor-theme'
 Plug 'olimorris/onedarkpro.nvim'
+Plug 'navarasu/onedark.nvim'
 Plug 'kkga/vim-envy'
 Plug 'savq/melange-nvim'
 Plug 'w0ng/vim-hybrid'
@@ -39,12 +40,10 @@ Plug 'phha/zenburn.nvim'
 Plug 'Mofiqul/vscode.nvim'
 call plug#end()
 
-set background=light
-colorscheme hybrid
-
 if has('termguicolors')
     set termguicolors
 endif
+
 
 set nocompatible            " disable compatibility to old-time vi
 " set showmatch             " show matching
@@ -64,12 +63,13 @@ filetype plugin indent on   " allow auto-indenting depending on file type
 syntax on                   " syntax highlighting
 set mouse=                  " disable mouse click
 filetype plugin on
+
 set cursorline              " highlight current cursorline
 set ttyfast                 " Speed up scrolling in Vim
 " set spell                 " enable spell check (may need to download language package)
 set noswapfile              " disable creating swap file
 set clipboard=
-set fillchars=eob:\ ,fold:\ ,vert:\│ " remove unnecessary tildas at empty lines
+set fillchars=eob:\ ,fold:\ ,vert:\<E2><94><82> " remove unnecessary tildas at empty lines
 let &scrolloff = 5
 set showtabline=0
 set relativenumber
@@ -134,3 +134,15 @@ command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir 
 
 au TextYankPost * silent! lua vim.highlight.on_yank()
 autocmd TermOpen * setlocal nonumber norelativenumber
+
+set t_Co=256
+set background=light
+let g:PaperColor_Theme_Options = {
+   \   'theme': {
+   \     'default': {
+   \       'transparent_background': 1
+   \     }
+   \   }
+   \ }
+"colorscheme PaperColor
+colorscheme vscode
