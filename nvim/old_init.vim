@@ -69,7 +69,7 @@ set ttyfast                 " Speed up scrolling in Vim
 " set spell                 " enable spell check (may need to download language package)
 set noswapfile              " disable creating swap file
 set clipboard=
-set fillchars=eob:\ ,fold:\ ,vert:\<E2><94><82> " remove unnecessary tildas at empty lines
+set fillchars=eob:\ ,fold:\ ,vert:\│ " remove unnecessary tildas at empty lines
 let &scrolloff = 5
 set showtabline=0
 set relativenumber
