@@ -3,7 +3,7 @@ vim.cmd('source ~/.config/nvim/old_init.vim')
 
 --tree-sitter
 require('nvim-treesitter.configs').setup({
-    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'typescript', 'help', 'cmake', 'kotlin', 'java', 'bash', 'dockerfile', 'markdown', 'make' },
+    ensure_installed = { 'c', 'cpp', 'go', 'lua', 'python', 'rust', 'typescript', 'cmake', 'kotlin', 'java', 'bash', 'dockerfile', 'markdown', 'make' },
 
     highlight = {
         enable = true,
