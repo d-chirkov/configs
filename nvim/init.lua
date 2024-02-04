@@ -177,6 +177,24 @@ require'nvim-treesitter.configs'.setup {
     },
 }
 
+--vscode
+local c = require('vscode.colors').get_colors()
+require('vscode').setup({
+    style = 'light',
+    transparent = true,
+    italic_comments = true,
+    --disable_nvimtree_bg = true,
+    color_overrides = {
+        vscLineNumber = '#b8b8b8',
+    },
+    group_overrides = {
+        --CursorLine = { bg='#dcdcdc' },
+        --MatchParen = { bg='#c0c0c0'},
+    }
+})
+require('vscode').load()
+
+
 --lualine
 require('lualine').setup {
     options = {
@@ -224,23 +242,6 @@ require('lualine').setup {
     },
     extensions = {}
 }
-
---vscode
-local c = require('vscode.colors').get_colors()
-require('vscode').setup({
-    style = 'light',
-    transparent = true,
-    italic_comments = true,
-    --disable_nvimtree_bg = true,
-    color_overrides = {
-        vscLineNumber = '#b8b8b8',
-    },
-    group_overrides = {
-        --CursorLine = { bg='#dcdcdc' },
-        --MatchParen = { bg='#c0c0c0'},
-    }
-})
-require('vscode').load()
 
 --fzf-lua
 require("fzf-lua").setup({
