@@ -20,6 +20,14 @@ local function on_attach(bufnr)
     local function opts(desc)
         return { desc = 'nvim-tree: ' .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
     end
+    -- cusom nvim tree commands
+    vim.keymap.set("n", "gp", function()
+        local node = api.tree.get_node_under_cursor()
+        local path = vim.fn.fnamemodify(node.absolute_path, ":p:h")
+        vim.cmd('let @" = "' .. path .. '"')
+        local command = vim.api.nvim_replace_termcodes([[:tabnew<cr>:terminal<cr>acd <c-\><c-n>pa<cr>clear<cr>]], true, true, true)
+        vim.api.nvim_feedkeys(command, 'in', true)
+    end, opts("Run terminal in new tab"))
     -- BEGIN_DEFAULT_ON_ATTACH
     vim.keymap.set('n', '<C-]>', api.tree.change_root_to_node,          opts('CD'))
     vim.keymap.set('n', '<C-e>', api.node.open.replace_tree_buffer,     opts('Open: In Place'))
