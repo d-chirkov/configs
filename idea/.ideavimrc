@@ -1,0 +1,73 @@
+" options
+set scrolloff=5
+set relativenumber
+set showmode
+set showcmd
+set visualbell
+" set clipboard+=unnamed
+set ignorecase
+set smartcase
+set incsearch
+set nohlsearch
+
+
+" plugins
+set nerdtree
+set surround
+set highlightedyank
+set commentary
+set ideajoin
+
+" mapping
+map gvr :source ~/.ideavimrc<CR>
+map ga <action>(SelectInProjectView)
+map gb <action>(Git.Branches)
+map gc <action>(CommentByLineComment)
+map gC <action>(TextEditorWithPreview.Layout.EditorOnly)
+map gd <action>(GotoDeclaration)
+map gD <action>(FindUsages)
+map ge <action>(GotoNextError)
+map gf <action>(ReformatCode)
+map gr <action>(Run)
+map gh <action>(RenameElement)
+map gH <action>(Refactorings.QuickListPopupAction)
+map gi <action>(GotoImplementation)
+map gj <action>(FindInPath)
+map gk <action>(GotoFile)
+map gl <action>(RecentLocations)
+map gn <action>(RecentFiles)
+map go <action>(ShowHoverInfo)
+map gp <action>(Annotate)
+map gP <action>(TextEditorWithPreview.Layout.EditorAndPreview)
+map gs <action>(GotoFile)
+map gt <action>(GotoTypeDeclaration)
+map gT <action>(GotoTest)
+" gu and gU is reserved for lowercase and uppercase
+map gw <action>(CloseContent)
+map gW <action>(CloseAllEditorsButActive)
+map gx <action>(CloseAllEditors)
+map gX <action>(CloseProject)
+map gzc <action>(CollapseAllRegions)
+map gzo <action>(ExpandAllRegions)
+map g9 <action>(PreviousTab)
+map g0 <action>(NextTab)
+map g[ <action>(MethodUp)
+map g] <action>(MethodDown)
+map g; <action>(QuickTypeDefinition)
+map g' <action>(QuickImplementations)
+map g\w <action>(ReopenClosedTab)
+map g/ <action>($LRU)
+map \ @q
+
+nmap <C-J> 10j
+nmap <C-K> 10k
+vmap <C-J> 10j
+vmap <C-K> 10k
+
+# issue with nerdtree: https://youtrack.jetbrains.com/issue/VIM-3791/gg-G-movements-are-not-supported-and-break-navigation-in-NERDTree
+let g:NERDTreeMapPreview = 'u'
+let g:NERDTreeMapPreviewSplit = ''
+let g:NERDTreeMapPreviewVSplit = ''
+let g:NERDTreeMapCloseDir = 'h'
+let g:NERDTreeMapActivateNode = 'l'
+let g:NERDTreeMapJumpRoot = 'gg'
