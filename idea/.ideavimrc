@@ -19,7 +19,6 @@ set commentary
 set ideajoin
 
 " mapping
-map gvr :source ~/.ideavimrc<CR>
 map ga <action>(SelectInProjectView)
 map gb <action>(Git.Branches)
 map gc <action>(CommentByLineComment)
@@ -29,17 +28,13 @@ map gD <action>(FindUsages)
 map ge <action>(GotoNextError)
 map gf <action>(ReformatCode)
 map gr <action>(Run)
-map gh <action>(RenameElement)
-map gH <action>(Refactorings.QuickListPopupAction)
 map gi <action>(GotoImplementation)
 map gj <action>(FindInPath)
 map gk <action>(GotoFile)
 map gl <action>(RecentLocations)
-map gn <action>(RecentFiles)
 map go <action>(ShowHoverInfo)
 map gp <action>(Annotate)
 map gP <action>(TextEditorWithPreview.Layout.EditorAndPreview)
-map gs <action>(GotoFile)
 map gt <action>(GotoTypeDeclaration)
 map gT <action>(GotoTest)
 " gu and gU is reserved for lowercase and uppercase
@@ -49,15 +44,22 @@ map gx <action>(CloseAllEditors)
 map gX <action>(CloseProject)
 map gzc <action>(CollapseAllRegions)
 map gzo <action>(ExpandAllRegions)
-map g9 <action>(PreviousTab)
-map g0 <action>(NextTab)
-map g[ <action>(MethodUp)
-map g] <action>(MethodDown)
 map g; <action>(QuickTypeDefinition)
 map g' <action>(QuickImplementations)
 map g\w <action>(ReopenClosedTab)
 map g/ <action>($LRU)
 map \ @q
+
+" mapped in settings
+" map <C-h> <action>(RenameElement)
+" map <C-g> <action>(Generate)
+" map <C-;> <action>(Refactorings.QuickListPopupAction)
+" map <C-l> <action>(ShowIntentionActions)
+" map <C-m> <action>(RecentFiles)
+" map <C-]> <action>(MethodUp)
+" map <C-[> <action>(MethodDown)
+" map <C-9> <action>(PreviousTab)
+" map <C-0> <action>(NextTab)
 
 nmap <C-J> 10j
 nmap <C-K> 10k
