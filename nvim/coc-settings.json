@@ -1,0 +1,7 @@
+{
+    "suggest.autoTrigger": "none",
+    "inlayHint.display": false,
+    "diagnostic.enableMessage": "jump",
+    "java.import.gradle.java.home": "/Users/dmitriichirkov/.gradle/jdks/eclipse_adoptium-21-aarch64-os_x.2/jdk-21.0.6+7/Contents/Home",
+    "java.saveActions.organizeImports": true
+}
